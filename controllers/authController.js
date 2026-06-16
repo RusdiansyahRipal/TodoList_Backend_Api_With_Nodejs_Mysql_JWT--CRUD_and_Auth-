@@ -13,11 +13,15 @@ const register = async (req,res)=>{
         return response(400,null,'Semua Data Wajib Di Isi',res)
     }    
 
-    // cek apakah email sudah ada atau belum
-
+    
+    // query cek email
     const sqlCekEmail = 'SELECT * From users WHERE email = ?';
+    // query inset user
+    const sqlInsertUser = 'INSERT INTO users (email,username,password) VALUES (?,?,?)';
+    
 
-    db.query(sqlCekEmail,[email],(err,result)=>{
+    // Menjalankan query cek email
+    db.query(sqlCekEmail,[email], async (err,result)=>{
         // cek error quey
         if(err){
             return response(400,null,err.message,res);
@@ -29,14 +33,37 @@ const register = async (req,res)=>{
         }
 
         // hash password
-        const hashPassword = await bcrypt.hash(password,10)
-        console.log(hashPassword)
+        let hashPassword;
+        try{
+             hashPassword = await bcrypt.hash(password,10)
 
-        // respon jika berhasil
-    response (
-        200, { username, email, password }, "Email Belum Terdafatar", res
-    )
+        } catch (err){
+            return response (
+                500,
+                null,
+                err.message,
+                res
+            )
+
+        }
+        
+
+        // menjalankan query insert users
+    db.query(sqlInsertUser,[email,username,hashPassword],(err,result)=>{
+
+        if(err){
+            return response(500,null,err.message,res)
+        }
+
+        return response (
+            201,
+            result,
+            'DATA BERHASIL DISIMPAN',
+            res
+        )
     })
+    })
+    
     
 
 

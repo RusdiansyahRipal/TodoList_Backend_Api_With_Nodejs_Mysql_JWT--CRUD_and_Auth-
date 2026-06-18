@@ -1,6 +1,9 @@
-const response = require('../response')
-const db = require('../connection.js')
+const response = require('../response');
+const db = require('../connection.js');
 const bcrypt = require ('bcrypt');
+const jwt =  require('jsonwebtoken');
+
+const SECRET_KEY = 'belajar_backend_bersama_ripal'
 
 // 1. REGISTER =========================================================
 const register = async (req,res)=>{
@@ -68,7 +71,78 @@ const register = async (req,res)=>{
 
 
 }
+// 2. LOGIN===============================================================
+const login = async(req,res)=>{
+    const{email,password} = req.body;
+
+    if (!email || !password) {
+        return response(
+            400,
+            null,
+            'DATA TIDAK BOLEH KOSONG',
+            res
+        )
+    }
+
+    const sqlCariEmail = 'SELECT * FROM users WHERE email = ?';
+    db.query(sqlCariEmail,[email], async (err,result)=>{
+        
+        if(err){
+            return response(
+                400,
+                null,
+                err.message,
+                res
+            )
+        }
+
+        if(result.length === 0) {
+            return response(
+                400,
+                null,
+                'Email atau password salah',
+                res
+            )
+        }
+
+        const isMatch = await bcrypt.compare(
+            password,
+            result[0].password
+        )
+
+        if(!isMatch){
+            return response(
+                400,
+                null,
+                'password salah',
+                res
+            )
+        }
+        // jwt =====================================================
+        const token = jwt.sign(
+            {
+                id:result[0].id,
+                email:result[0].email
+            },
+            SECRET_KEY,
+            {
+                expiresIn : '1d'
+            }
+        )
+
+        return response(
+            200,
+            {
+                token
+            },
+            'LOGIN BERHASIL',
+            res
+        )
+    })
+
+}
 
 module.exports = {
-    register
+    register,
+    login
 }

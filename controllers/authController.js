@@ -118,7 +118,7 @@ const login = async(req,res)=>{
                 res
             )
         }
-        // jwt =====================================================
+        // membuat token jwt =====================================================
         const token = jwt.sign(
             {
                 id:result[0].id,
@@ -129,7 +129,7 @@ const login = async(req,res)=>{
                 expiresIn : '1d'
             }
         )
-
+        // membuat token jwt ====================================================
         return response(
             200,
             {

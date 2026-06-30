@@ -11,7 +11,8 @@ router.get('/test',
     authMidlleware,
     (req,res)=>{
         res.json({
-            message : 'controller masih dijalankan'
+            message : 'middleware berhasil',
+            user : req.user
         })
 })
 router.get('/',(req,res)=>{

@@ -1,7 +1,15 @@
-const express =  requier('express');
-const routes = express.Routes();
-const {createTask} = require("../controllers/taskController");
-const authMiddleware = require('../middleware/authMiddleware')
+const express =  require('express');
+const router = express.Router();
+const {createTask, getTask} = require("../controllers/taskController");
+const authMiddleware = require('../middleware/authMiddleware');
+const authMidlleware = require('../middleware/authMiddleware');
 
 // route create task
-routes.post("/tasks",authMiddleware,createTask);
+router.post("/tasks",authMiddleware,createTask);
+
+// route get task
+
+router.get("/tasks",authMidlleware,getTask)
+
+
+module.exports = router;

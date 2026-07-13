@@ -48,5 +48,45 @@ const getTask = (req,res)=>{
 
 }
 
+const updateTask = (req,res)=>{
+    /* ======== menyimpan data yang dibutuhkan ============= */
+// 1. mengkap id task / id todo yang dikirim melalui parameter
+    const {id} = req.params;
+// 2. menangkap data yang akan diubah yang dirim melalui post (form)
+    const {title,status} = req.body;
+// 3. menangkap data user yang sedang login
+    const userId = req.user.id;
 
-module.exports = {createTask,getTask};
+    /** VALIDASI */
+// 1. validasi data tidak boleh kosong
+
+    if(!title || !status) {
+        return response(400,null,'DATA TIDAK BOLEH KOSONG', res)
+    }
+}
+
+    /** MENULIS  QUERY SQL */
+// 1. data yang dapat diupdate adalah data yang id todo (todo) milik dari user yang login
+
+    const sqlUpdate = `UPDATE tasks SET title = ?, status = ? WHERE id = ? AND user_id = ?`; 
+
+    /** MENJALANKAN QUERY SQL */
+
+    db.query(sqlUpdate,[title, status, id, userId],(err,result)=>{
+// validasi jika error
+        if(err){
+            return response ( 500, null, err.message, res);
+        }
+
+// validasi jika data tidak ditemukan atau task/todo bukan milik user atau gagal mengubah data
+        if(result.affectedRows === 0){
+            return response (404, null, 'DATA TIDAK DITEMUKAN', res)
+        }
+
+        return response(200, result, 'DATA BERHASIL DIUBAH', res);
+
+    })
+
+
+
+module.exports = {createTask,getTask,updateTask};

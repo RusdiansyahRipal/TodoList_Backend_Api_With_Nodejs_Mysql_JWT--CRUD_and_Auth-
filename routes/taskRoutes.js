@@ -1,15 +1,18 @@
 const express =  require('express');
 const router = express.Router();
-const {createTask, getTask} = require("../controllers/taskController");
+const {createTask, getTask, updateTask} = require("../controllers/taskController");
 const authMiddleware = require('../middleware/authMiddleware');
-const authMidlleware = require('../middleware/authMiddleware');
-
-// route create task
+// route menyimpan task task
 router.post("/tasks",authMiddleware,createTask);
 
-// route get task
+// route menampilkan  task
 
 router.get("/tasks",authMidlleware,getTask)
+
+// route ubah task
+
+router.put("/task/:id",authMiddleware,updateTask);
+
 
 
 module.exports = router;

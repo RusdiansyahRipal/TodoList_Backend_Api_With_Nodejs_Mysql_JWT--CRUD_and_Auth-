@@ -1,6 +1,6 @@
 const express =  require('express');
 const router = express.Router();
-const {createTask, getTask, updateTask} = require("../controllers/taskController");
+const {createTask, getTask, updateTask, deleteTask} = require("../controllers/taskController");
 const authMiddleware = require('../middleware/authMiddleware');
 // route menyimpan task task
 router.post("/tasks",authMiddleware,createTask);
@@ -11,8 +11,11 @@ router.get("/tasks",authMidlleware,getTask)
 
 // route ubah task
 
-router.put("/task/:id",authMiddleware,updateTask);
+router.put("/tasks/:id",authMiddleware,updateTask);
 
+// route hapus task
+
+router.delete("/tasks/:id",authMiddleware, deleteTask)
 
 
 module.exports = router;

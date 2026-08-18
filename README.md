@@ -59,6 +59,35 @@ APITODO/
 
 ## 🗄 Database Schema
 
+Project ini menggunakan MySQL sebagai database relasional.
+
+### Tabel `users`
+
+| Kolom | Tipe Data | Keterangan |
+|---|---|---|
+| `id` | INT(11) | Primary Key, Auto Increment |
+| `username` | VARCHAR(255) | Username pengguna |
+| `email` | VARCHAR(100) | Email pengguna, Unique |
+| `password` | VARCHAR(255) | Password yang telah di-hash |
+| `created_at` | TIMESTAMP | Waktu user dibuat |
+
+### Tabel `tasks`
+
+| Kolom | Tipe Data | Keterangan |
+|---|---|---|
+| `id` | INT(11) | Primary Key, Auto Increment |
+| `user_id` | INT(11) | ID user pemilik todo |
+| `title` | VARCHAR(255) | Judul todo |
+| `status` | ENUM('pending', 'done') | Status todo |
+| `created_at` | TIMESTAMP | Waktu todo dibuat |
+
+### Relasi
+
+- Satu user dapat memiliki banyak todo.
+- Setiap todo dimiliki oleh seorang user.
+- `tasks.user_id` digunakan untuk menghubungkan todo dengan user yang login.
+- Data todo difilter berdasarkan `user_id` dari user yang telah terautentikasi.
+
 ## 📌 API Endpoints
 
 ## 🔐 Authentication Flow

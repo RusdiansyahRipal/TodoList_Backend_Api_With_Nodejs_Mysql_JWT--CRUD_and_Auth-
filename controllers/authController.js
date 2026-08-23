@@ -124,7 +124,7 @@ const login = async(req,res)=>{
                 id:result[0].id,
                 email:result[0].email
             },
-            SECRET_KEY,
+            process.env.JWT_SECRET,
             {
                 expiresIn : '1d'
             }

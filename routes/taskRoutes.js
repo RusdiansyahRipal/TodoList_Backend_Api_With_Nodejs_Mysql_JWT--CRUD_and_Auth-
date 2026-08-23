@@ -7,7 +7,7 @@ router.post("/tasks",authMiddleware,createTask);
 
 // route menampilkan  task
 
-router.get("/tasks",authMidlleware,getTask)
+router.get("/tasks", authMiddleware,getTask)
 
 // route ubah task
 
